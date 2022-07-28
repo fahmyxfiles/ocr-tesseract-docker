@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
 from werkzeug import secure_filename
 import os
 import sys
@@ -6,9 +6,6 @@ from PIL import Image
 import pytesseract
 import argparse
 import cv2
-
-__author__ = 'Rick Torzynski <ricktorzynski@gmail.com>'
-__source__ = ''
 
 app = Flask(__name__)
 UPLOAD_FOLDER = './static/uploads'
@@ -19,11 +16,7 @@ app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 def index():
   return render_template("index.html")
 
-@app.route("/about")
-def about():
-  return render_template("about.html")
-
-@app.route('/uploader', methods = ['GET', 'POST'])
+@app.route('/ocr', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
       f = request.files['file']
@@ -55,9 +48,9 @@ def upload_file():
       # remove the processed image
       os.remove(ofilename)
 
-      return render_template("uploaded.html", displaytext=text, fname=filename)
+      return jsonify(result=text)
 
 if __name__ == '__main__':
   port = int(os.environ.get('PORT', 5000))
-  app.run(debug=True, host='0.0.0.0', port=port)
+  app.run(debug=False, host='0.0.0.0', port=port)
   # app.run(host="0.0.0.0", port=5000, debug=True)

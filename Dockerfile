@@ -1,5 +1,4 @@
 FROM ubuntu:18.04
-MAINTAINER Rick Torzynski "ricktorzynski@gmail.com"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,5 +21,6 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python3"]
-CMD ["app.py"]
+EXPOSE 5000
+
+CMD ["tail", "-f", "/dev/null"]
